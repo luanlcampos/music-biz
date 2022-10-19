@@ -1,0 +1,62 @@
+﻿@model S2022A6LLC.Models.AlbumWithDetailViewModel
+
+@{
+    ViewBag.Title = "Album Details";
+}
+
+<h2>@ViewBag.Title - @Html.DisplayFor(model => model.Name)</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReleaseDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReleaseDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UrlAlbum)
+        </dt>
+
+        <dd>
+            @*@Html.DisplayFor(model => model.UrlAlbum)*@
+            <img src="@Html.DisplayFor(model => model.UrlAlbum)" style="width:150px;height:auto;" />
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Genre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Genre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Background)
+        </dt>
+
+        <dd>
+            @Html.Raw(Model.Background)
+            @*@Html.DisplayFor(model => model.Background)*@
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index") |
+    @if (User.IsInRole("Clerk"))
+    {
+        @Html.ActionLink("Add track to this album", "AddTrack", new { id = Model.Id })
+    }
+</p>

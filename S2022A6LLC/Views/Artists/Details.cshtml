@@ -1,0 +1,225 @@
+﻿@model S2022A6LLC.Models.ArtistWithMediaInfo
+
+@{
+    ViewBag.Title = "Artist Details";
+}
+
+<h2>@ViewBag.Title - @Html.DisplayFor(model => model.Name)</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UrlArtist)
+        </dt>
+
+        <dd>
+            <img src="@Html.DisplayFor(model => model.UrlArtist)" style="width:100px;height:auto;" />
+            <hr />
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+            <hr />
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BirthName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BirthName)
+            <hr />
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BirthOrStartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BirthOrStartDate)
+            <hr />
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Genre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Genre)
+            <hr />
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Portrayal)
+        </dt>
+
+        <dd >
+            @{
+                if (Model.Portrayal == null || Model.Portrayal.Length == 0)
+                {
+                    <span style="color: rgba(0,0,0,0.5)">No Artist Portrayal Available</span>
+                    <hr />
+                }
+                else
+                {
+                    <div style="max-height: 200px; overflow-y: auto; border: 1px rgb(220 220 220) solid; border-radius: 5px; padding: 10px">
+
+                    @Html.Raw(Model.Portrayal)
+                    </div>
+                    <hr />
+                }
+            }
+
+        </dd>
+
+
+        @* Photos sections for ArtistMediaItem *@
+        <dt>
+            Photos
+        </dt>
+        <dd>
+            <div style="display: flex; flex-wrap: wrap; justify-content:flex-start;gap: 48px">
+
+                @{
+                    var imagesList = Model.ArtistMediaItems.Where(m => m.ContentType.Contains("image/"));
+
+                    if (imagesList.Count() == 0)
+                    {
+                        <span style="color: rgba(0,0,0,0.5)">No images to display</span>
+                    }
+                    else
+                    {
+                        foreach (var image in imagesList)
+                        {
+                            <div>
+                                <span>@image.Caption</span><br />
+                                <img src="/artistmediaitem/@image.StringId" alt="@image.Caption" title="@image.Caption" width="200" />
+                            </div>
+                        }
+                    }
+                }
+            </div>
+            <hr />
+        </dd>
+    
+
+        @* Audios sections for ArtistMediaItem *@
+        <dt>
+            Audios
+        </dt>
+        <dd>
+            <div style="display: flex; flex-wrap: wrap; justify-content:flex-start;gap: 48px">
+                @{
+                    var audiosList = Model.ArtistMediaItems.Where(m => m.ContentType.Contains("audio/"));
+
+                    if (audiosList.Count() == 0)
+                    {
+                        <span style="color: rgba(0,0,0,0.5)">No audios to display</span>
+                    }
+                    else
+                    {
+                        foreach (var audio in audiosList)
+                        {
+                            <div>
+                                <span>@audio.Caption</span><br />
+                                <audio src="/artistmediaitem/@audio.StringId" controls="controls" />
+                            </div>
+                        }
+                    }
+                }
+            </div>
+            <hr />
+        </dd>
+
+        @* Videos sections for ArtistMediaItem *@
+        <dt>
+            Videos
+        </dt>
+        <dd>
+            <div style="display: flex; flex-wrap: wrap; justify-content:flex-start;gap: 48px">
+                @{
+                    var videosList = Model.ArtistMediaItems.Where(m => m.ContentType.Contains("video/"));
+
+                    if (videosList.Count() == 0)
+                    {
+                        <span style="color: rgba(0,0,0,0.5)">No videos to display</span>
+                    }
+                    else
+                    {
+                        foreach (var video in videosList)
+                        {
+                            <div>
+                                <span>@video.Caption</span><br />
+                                <video src="/artistmediaitem/@video.StringId" controls="controls" width="256" height="144" />
+                            </div>
+                        }
+                    }
+                }
+            </div>
+            <hr />
+        </dd>
+
+        @* Documents sections for ArtistMediaItem *@
+        <dt>
+            Documents
+        </dt>
+        <dd>
+            <div style="display: flex; flex-wrap: wrap; justify-content:flex-start;gap: 48px">
+                @*@foreach (var a in Model.ArtistMediaItems)
+        {
+            <span>@a.ContentType</span> <br />
+        }*@
+
+                @{
+                    var docsList = Model.ArtistMediaItems.Where(m => m.ContentType.Contains("application/"));
+
+                    if (docsList.Count() == 0)
+                    {
+                        <span style="color: rgba(0,0,0,0.5)">No docs to display</span>
+                    }
+                    else
+                    {
+                        foreach (var item in docsList)
+                        {
+                            <div>
+                                <span>@item.Caption</span><br />
+                                @if (item.ContentType.Contains("pdf"))
+                                {
+                                    <a href="/ArtistMediaItem/@item.StringId/Download"><img src="~/Icons/icon-pdf.png" alt="pdf download icon" /></a>
+                                }
+                                else if (item.ContentType.Contains("word"))
+                                {
+                                    <a href="/ArtistMediaItem/@item.StringId/Download"><img src="~/Icons/icon-word.png" alt="word download icon" /></a>
+                                }
+                                else if (item.ContentType.Contains("ms-excel") || item.ContentType.Contains("spreadsheet"))
+                                {
+                                    <a href="/ArtistMediaItem/@item.StringId/Download"><img src="~/Icons/icon-excel.png" alt="excel download icon" /></a>
+                                }
+                            </div>
+                        }
+                    }
+                }
+            </div>
+            <hr />
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index") |
+    @if (User.IsInRole("Coordinator"))
+    {
+        @Html.ActionLink("Add album for this artist", "AddAlbum", new { id = Model.Id });
+        @Html.Raw(" | ");
+
+    }
+    @if (User.IsInRole("Executive"))
+    {
+        @Html.ActionLink("Add media for this artist", "AddArtistMediaItem", new { id = Model.Id })
+        @Html.Raw(" | ");
+    }
+</p>
